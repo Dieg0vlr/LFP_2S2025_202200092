@@ -1,0 +1,9 @@
+1,Juan,xxx00,101,Pedro
+2,Maria,xxxxx,102,Laura
+3,Carlos,xx000,103,Andres
+1,Juan,x0000,104,Sofia
+2,Maria,xxxx0,105,Daniel
+4,Lucia,xxxxx,106,Paola
+3,Carlos,xx000,107,Mario
+1,Juan,xxxx0,108,Ana
+4,Lucia,x0000,109,Jose

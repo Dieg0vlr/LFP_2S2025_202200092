@@ -1,0 +1,9 @@
+{
+  "name": "lfp-practica",
+  "version": "1.0.0",
+  "type": "commonjs",
+  "main": "Controlador/index.js",
+  "scripts": {
+    "start": "node Controlador/index.js"
+  }
+}

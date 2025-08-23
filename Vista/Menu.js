@@ -1,4 +1,4 @@
-const readline = requiere('readline');
+const readline = require('readline');
 
 class Menu {
     constructor(callCenter) {
@@ -29,17 +29,27 @@ class Menu {
                     break;
                 case "2":
                     this.callCenter.exportarHistorial();
+                    this.mostrarMenu();
+                    break;
                 case "3":
-                    //exportar listado de operadores
+                    this.callCenter.exportarListadoOperadores();
+                    this.mostrarMenu();
+                    break;
                 case "4":
-                    //exportar lista de clientes
+                    this.callCenter.exportarListadoClientes();
+                    this.mostrarMenu();
+                    break;
                 case "5":
                     this.callCenter.rendimientoOperadores();
+                    this.mostrarMenu();
+                    break;
                 case "6":
                     this.callCenter.mostrarPorcentajeClasificacion();
+                    this.mostrarMenu();
                     break
                 case "7":
-                    //Mostrar cantidad de llamadas por calificacion
+                    this.callCenter.mostrarCantidadPorCalificacion();
+                    this.mostrarMenu();
                     break
                 case "8":
                     this.rl.close();
@@ -53,11 +63,12 @@ class Menu {
     }
 
     cargarRegistros() {
-
-        this.callCenter.cargarArchivo("./data/archivo_llamadas.txt")
-        console.log("Registros cargados correctamente")
+    this.rl.question("Ingrese la ruta del archivo de llamadas: ", (ruta) => {
+        this.callCenter.cargarArchivo(ruta);
         this.mostrarMenu();
-    }
+    });
+}
+
 }
 
 module.exports = Menu;
