@@ -104,9 +104,26 @@ class lexer {
 
     // ===== Helpers =====
     _isWhitespace(ch) {
-        return ch === ' ' || ch === '\t' || ch === '\r' || ch === '\n';
+    return ch === ' ' || ch === '\t' || ch === '\r' || ch === '\n';
     }
-    _isLetter(ch) { return /[A-Za-zÁÉÍÓÚáéíóúÑñ]/.test(ch); }
+
+    _isLetter(ch) {
+        if (!ch) return false;
+        const code = ch.charCodeAt(0);
+        // A-Z
+        if (code >= 65 && code <= 90) return true;
+        // a-z
+        if (code >= 97 && code <= 122) return true;
+        // Ñ ñ
+        if (code === 209 || code === 241) return true;
+        // Á É Í Ó Ú  á é í ó ú
+        switch (code) {
+            case 193: case 201: case 205: case 211: case 218:
+            case 225: case 233: case 237: case 243: case 250:
+            return true;
+        }
+        return false;
+        }
     _isDigit(ch) { return ch >= '0' && ch <= '9'; }
     _isSymbol(ch) { return '{}[]:,-'.includes(ch); }
 

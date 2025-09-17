@@ -1,0 +1,62 @@
+
+<!doctype html>
+<meta charset="utf-8">
+<title>LFP Proyecto — Analizador</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  body{font-family:system-ui,Arial,sans-serif;max-width:820px;margin:40px auto;padding:0 16px;}
+  .card{border:1px solid #ddd;border-radius:12px;padding:18px;margin-bottom:16px;}
+  button{padding:10px 16px;border-radius:10px;border:1px solid #888;background:#f7f7f7;cursor:pointer}
+  button:disabled{opacity:.5;cursor:not-allowed}
+  .links a{display:block;margin:6px 0;}
+  .muted{color:#666}
+</style>
+
+<h1>Analizador de Torneo</h1>
+
+<div class="card">
+  <form id="form">
+    <label>Archivo (.txt): </label>
+    <input type="file" name="archivo" accept=".txt" required />
+    <button id="btn" type="submit">Analizar</button>
+  </form>
+  <p class="muted">El archivo debe seguir el formato del lenguaje del proyecto (TORNEO, EQUIPOS, ELIMINACION...)</p>
+</div>
+
+<div id="resultado" class="card" style="display:none">
+  <h2>Reportes</h2>
+  <div class="links" id="links"></div>
+</div>
+
+<script>
+  const form = document.getElementById('form');
+  const btn = document.getElementById('btn');
+  const box = document.getElementById('resultado');
+  const links = document.getElementById('links');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btn.disabled = true;
+    links.innerHTML = 'Procesando...';
+
+    const data = new FormData(form);
+    try {
+      const resp = await fetch('/analizar', { method:'POST', body:data });
+      if (!resp.ok) throw new Error('Error en el analisis');
+      const json = await resp.json();
+      links.innerHTML = '';
+      for (const [k, v] of Object.entries(json.files)) {
+        const a = document.createElement('a');
+        a.href = v; a.target = '_blank';
+        a.textContent = 'Abrir ' + k;
+        links.appendChild(a);
+      }
+      box.style.display = '';
+    } catch (err) {
+      links.textContent = 'Ocurrio un error: ' + err.message;
+      box.style.display = '';
+    } finally {
+      btn.disabled = false;
+    }
+  });
+</script>

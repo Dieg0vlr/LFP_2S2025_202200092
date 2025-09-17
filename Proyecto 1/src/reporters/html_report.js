@@ -70,6 +70,7 @@ function guardar_errores_html(errores, destinoDir) {
 
 // --------------- RESUMEN (info + posiciones + goleadores + partidos) --------------
 function guardar_resumen_html(modelo, destinoDir) {
+  
   const info = modelo.info || {};
   const equiposStats = modelo.equiposStats || [];
   const goleadores = modelo.goleadores || [];
@@ -86,12 +87,34 @@ function guardar_resumen_html(modelo, destinoDir) {
   const infoHtml = _table(['Estadística', 'Valor'], infoRows);
 
   // Tabla de posiciones
-  const eqRows = [];
+  const eqRowsRaw = [];
   for (let i = 0; i < equiposStats.length; i++) {
     const e = equiposStats[i];
-    eqRows.push([e.equipo, e.pj, e.g, e.p, e.gf, e.gc, e.dg, e.fase]);
+    const pts = (e.g * 3) + 0; // sin empates (3 por victoria)
+    eqRowsRaw.push({
+      equipo: e.equipo, pj: e.pj, g: e.g, p: e.p, gf: e.gf, gc: e.gc, dg: e.dg, fase: e.fase, pts
+    }); 
   }
-  const eqHtml = _table(['Equipo','PJ','G','P','GF','GC','DG','Fase'], eqRows);
+  
+  //ordenar Pts desc, DG desc, nombre asc
+  for (let i = 0; i < eqRowsRaw.length; i++) {
+    for (let j = 0; j < eqRowsRaw.length - 1; j++) {
+      const a = eqRowsRaw[j], b = eqRowsRaw[j+1];
+      const swap =
+        (a.pts < b.pts) ||
+        (a.pts === b.pts && a.dg < b.dg) ||
+        (a.pts === b.pts && a.dg === b.dg && a.gf < b.gf) ||
+        (a.pts === b.pts && a.dg === b.dg && a.gf === b.gf && a.equipo > b.equipo);
+      if (swap) { const tmp = eqRowsRaw[j]; eqRowsRaw[j] = eqRowsRaw[j + 1]; eqRowsRaw[j + 1] = tmp; }
+    }
+  }
+  const posRows = [];
+  for (let i = 0; i <eqRowsRaw.length; i++) {
+    const e = eqRowsRaw[i];
+    posRows.push([i+1, e.equipo, e.pj, e.g, e.p, e.gf, e.gc, e.dg, e.pts, e.fase]);
+  }
+
+  const posHtml = _table(['Pos','Equipo','PJ','G','P','GF','GC','DG','Pts','Fase'], posRows);
 
   // Goleadores con orden burbuja: goles descendente / nombre ascendente
   const ordenados = goleadores.slice();
@@ -140,9 +163,10 @@ function guardar_resumen_html(modelo, destinoDir) {
   const html = "<!doctype html><meta charset=\"utf-8\"><title>Resumen</title>" +
                "<h1>Resumen del Torneo</h1>" +
                "<h2>Información General</h2>" + infoHtml +
-               "<h2>Tabla de Posiciones</h2>" + eqHtml +
+               "<h2>Tabla de Posiciones</h2>" + posHtml +
                "<h2>Goleadores</h2>" + golHtml +
                "<h2>Partidos</h2>" + parHtml +
+               bracketSection +
                errsHtml;
 
   fs.writeFileSync(path.join(destinoDir, 'resumen.html'), html);
