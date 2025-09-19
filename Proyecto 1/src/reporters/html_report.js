@@ -1,4 +1,3 @@
-
 const fs = require('fs');
 const path = require('path');
 
@@ -15,7 +14,7 @@ function _table(headers, rows) {
   for (let i = 0; i < rows.length; i++) {
     let fila = "<tr>";
     for (let j = 0; j < rows[i].length; j++) {
-      // Limpiar &, < para no romper el HTML
+      // limpiar &, < para no romper el HTML
       const val = String(rows[i][j]);
       let safe = "";
       for (let k = 0; k < val.length; k++) {
@@ -45,9 +44,10 @@ function guardar_tokens_html(tokens, destinoDir) {
     rows.push([i + 1, lexema, t.tipo, t.linea, t.columna]);
   }
 
-  const html = "<!doctype html><meta charset=\"utf-8\"><title>Tokens</title>" +
-               "<h1>Tokens Extraídos</h1>" +
-               _table(['No', 'Lexema', 'Tipo', 'Línea', 'Columna'], rows);
+  const html =
+    "<!doctype html><meta charset=\"utf-8\"><title>Tokens</title>" +
+    "<h1>Tokens Extraidos</h1>" +
+    _table(['No', 'Lexema', 'Tipo', 'Linea', 'Columna'], rows);
 
   fs.writeFileSync(path.join(destinoDir, 'tokens.html'), html);
 }
@@ -61,16 +61,16 @@ function guardar_errores_html(errores, destinoDir) {
     rows.push([i + 1, lexema, e.tipo, e.descripcion, e.linea, e.columna]);
   }
 
-  const html = "<!doctype html><meta charset=\"utf-8\"><title>Errores Léxicos</title>" +
-               "<h1>Errores Léxicos</h1>" +
-               _table(['No', 'Lexema', 'Tipo de Error', 'Descripción', 'Línea', 'Columna'], rows);
+  const html =
+    "<!doctype html><meta charset=\"utf-8\"><title>Errores Lexicos</title>" +
+    "<h1>Errores Lexicos</h1>" +
+    _table(['No', 'Lexema', 'Tipo de Error', 'Descripcion', 'Linea', 'Columna'], rows);
 
   fs.writeFileSync(path.join(destinoDir, 'errores.html'), html);
 }
 
 // --------------- RESUMEN (info + posiciones + goleadores + partidos) --------------
 function guardar_resumen_html(modelo, destinoDir) {
-  
   const info = modelo.info || {};
   const equiposStats = modelo.equiposStats || [];
   const goleadores = modelo.goleadores || [];
@@ -84,45 +84,53 @@ function guardar_resumen_html(modelo, destinoDir) {
     const k = keys[i];
     infoRows.push([k, info[k]]);
   }
-  const infoHtml = _table(['Estadística', 'Valor'], infoRows);
+  const infoHtml = _table(['Estadistica', 'Valor'], infoRows);
 
-  // Tabla de posiciones
+  // Tabla de posiciones (con puntos = 3 por victoria)
   const eqRowsRaw = [];
   for (let i = 0; i < equiposStats.length; i++) {
     const e = equiposStats[i];
-    const pts = (e.g * 3) + 0; // sin empates (3 por victoria)
+    const pts = (e.g * 3) + 0;
     eqRowsRaw.push({
       equipo: e.equipo, pj: e.pj, g: e.g, p: e.p, gf: e.gf, gc: e.gc, dg: e.dg, fase: e.fase, pts
-    }); 
+    });
   }
-  
-  //ordenar Pts desc, DG desc, nombre asc
+
+  // Orden: Pts desc, DG desc, GF desc, nombre asc
   for (let i = 0; i < eqRowsRaw.length; i++) {
     for (let j = 0; j < eqRowsRaw.length - 1; j++) {
-      const a = eqRowsRaw[j], b = eqRowsRaw[j+1];
+      const a = eqRowsRaw[j], b = eqRowsRaw[j + 1];
       const swap =
         (a.pts < b.pts) ||
         (a.pts === b.pts && a.dg < b.dg) ||
         (a.pts === b.pts && a.dg === b.dg && a.gf < b.gf) ||
         (a.pts === b.pts && a.dg === b.dg && a.gf === b.gf && a.equipo > b.equipo);
-      if (swap) { const tmp = eqRowsRaw[j]; eqRowsRaw[j] = eqRowsRaw[j + 1]; eqRowsRaw[j + 1] = tmp; }
+      if (swap) {
+        const tmp = eqRowsRaw[j];
+        eqRowsRaw[j] = eqRowsRaw[j + 1];
+        eqRowsRaw[j + 1] = tmp;
+      }
     }
   }
-  const posRows = [];
-  for (let i = 0; i <eqRowsRaw.length; i++) {
-    const e = eqRowsRaw[i];
-    posRows.push([i+1, e.equipo, e.pj, e.g, e.p, e.gf, e.gc, e.dg, e.pts, e.fase]);
-  }
 
+  const posRows = [];
+  for (let i = 0; i < eqRowsRaw.length; i++) {
+    const e = eqRowsRaw[i];
+    posRows.push([i + 1, e.equipo, e.pj, e.g, e.p, e.gf, e.gc, e.dg, e.pts, e.fase]);
+  }
   const posHtml = _table(['Pos','Equipo','PJ','G','P','GF','GC','DG','Pts','Fase'], posRows);
 
-  // Goleadores con orden burbuja: goles descendente / nombre ascendente
+  // Goleadores: goles desc, nombre asc
   const ordenados = goleadores.slice();
   for (let i = 0; i < ordenados.length; i++) {
     for (let j = 0; j < ordenados.length - 1; j++) {
-      const a = ordenados[j], b = ordenados[j+1];
+      const a = ordenados[j], b = ordenados[j + 1];
       const swap = (a.goles < b.goles) || (a.goles === b.goles && a.jugador > b.jugador);
-      if (swap) { const tmp = ordenados[j]; ordenados[j] = ordenados[j+1]; ordenados[j+1] = tmp; }
+      if (swap) {
+        const tmp = ordenados[j];
+        ordenados[j] = ordenados[j + 1];
+        ordenados[j + 1] = tmp;
+      }
     }
   }
   const golRows = [];
@@ -147,7 +155,13 @@ function guardar_resumen_html(modelo, destinoDir) {
   }
   const parHtml = _table(['Fase','Partido','Resultado','Ganador'], parRows);
 
-  // Errores de formato/consistencia 
+  // Seccion de bracket (.dot) si existe
+  const dotPath = path.join(destinoDir, 'bracket.dot');
+  const bracketSection = fs.existsSync(dotPath)
+    ? `<h2>Bracket (.dot)</h2><p>Archivo generado: <code>out/bracket.dot</code></p>`
+    : "";
+
+  // Errores de formato/consistencia
   let errsHtml = "";
   if (errores_semanticos.length) {
     const errsRows = [];
@@ -156,18 +170,19 @@ function guardar_resumen_html(modelo, destinoDir) {
       errsRows.push([i + 1, e.lexema, e.tipo, e.descripcion, e.linea, e.columna]);
     }
     errsHtml = "<h2>Errores de Formato y Consistencia</h2>" +
-               _table(['No','Lexema','Tipo','Descripción','Línea','Columna'], errsRows);
+               _table(['No','Lexema','Tipo','Descripcion','Linea','Columna'], errsRows);
   }
 
   // HTML final
-  const html = "<!doctype html><meta charset=\"utf-8\"><title>Resumen</title>" +
-               "<h1>Resumen del Torneo</h1>" +
-               "<h2>Información General</h2>" + infoHtml +
-               "<h2>Tabla de Posiciones</h2>" + posHtml +
-               "<h2>Goleadores</h2>" + golHtml +
-               "<h2>Partidos</h2>" + parHtml +
-               bracketSection +
-               errsHtml;
+  const html =
+    "<!doctype html><meta charset=\"utf-8\"><title>Resumen</title>" +
+    "<h1>Resumen del Torneo</h1>" +
+    "<h2>Informacion General</h2>" + infoHtml +
+    "<h2>Tabla de Posiciones</h2>" + posHtml +
+    "<h2>Goleadores</h2>" + golHtml +
+    "<h2>Partidos</h2>" + parHtml +
+    bracketSection +
+    errsHtml;
 
   fs.writeFileSync(path.join(destinoDir, 'resumen.html'), html);
 }

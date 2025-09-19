@@ -51,7 +51,8 @@ function parsear_modelo(tokens) {
     function expectSym(sym, desc) {
         const t = at();
         if (!t || t.tipo !== 'SIMBOLO' || t.lexema !== sym) {
-            pushErr(t, 'SIMBOLO_ESPERADO_FALTANTE', `Falta símbolo '${sym}' en ${desc}`);
+            pushErr(t, 'SIMBOLO_ESPERADO_FALTANTE', `Falta simbolo '${sym}' en ${desc}`);
+
             return null;
         }
         return adv();

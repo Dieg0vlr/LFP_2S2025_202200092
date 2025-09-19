@@ -1,0 +1,23 @@
+TORNEO {
+  nombre: "Mundial",
+  equipos: 2,
+  sede: "Qatar"
+}
+
+EQUIPOS {
+  equipo: "A" [
+    jugador: "Juan" [posicion: "Delantero", numero: 9, edad: 25]
+  ],
+  equipo: "B" [
+    jugador: "Luis" [posicion: "Portero", numero: 1, edad: 28]
+  ]
+}
+
+ELIMINACION {
+  final: [
+    partido: "A" vs "B" [resultado: "2-1", goleadores: [
+      "Juan" [minuto: 10],
+      "Luis" [minuto: 50]
+    ]]
+  ]
+}

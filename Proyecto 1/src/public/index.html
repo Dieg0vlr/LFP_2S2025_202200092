@@ -1,62 +1,72 @@
-
 <!doctype html>
-<meta charset="utf-8">
-<title>LFP Proyecto — Analizador</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>
-  body{font-family:system-ui,Arial,sans-serif;max-width:820px;margin:40px auto;padding:0 16px;}
-  .card{border:1px solid #ddd;border-radius:12px;padding:18px;margin-bottom:16px;}
-  button{padding:10px 16px;border-radius:10px;border:1px solid #888;background:#f7f7f7;cursor:pointer}
-  button:disabled{opacity:.5;cursor:not-allowed}
-  .links a{display:block;margin:6px 0;}
-  .muted{color:#666}
-</style>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>TourneyJS - Analisis</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body{font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; margin:24px;}
+    header{display:flex;gap:12px;align-items:center; margin-bottom:16px}
+    h1{margin:0}
+    .card{border:1px solid #ddd; border-radius:12px; padding:16px; margin:12px 0}
+    .row{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{display:inline-block; padding:10px 14px; border-radius:8px; border:1px solid #ccc; text-decoration:none; color:#111}
+    .btn.primary{background:#111; color:#fff; border-color:#111}
+    .muted{color:#666}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
+    #preview{display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:12px}
+    iframe{width:100%; height:320px; border:1px solid #eee; border-radius:8px}
+    .hidden{display:none}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>TourneyJS</h1>
+    <span class="muted">- analisis lexico y reportes (cliente puro, sin servidor)</span>
+  </header>
 
-<h1>Analizador de Torneo</h1>
+  <div class="card">
+    <div class="row">
+      <input type="file" id="fileInput" accept=".txt" />
+      <button id="analyzeBtn" class="btn primary">Analizar archivo</button>
+      <span id="status" class="muted"></span>
+    </div>
+    <p class="muted">Sube un .txt con las secciones TORNEO, EQUIPOS y ELIMINACION.</p>
+  </div>
 
-<div class="card">
-  <form id="form">
-    <label>Archivo (.txt): </label>
-    <input type="file" name="archivo" accept=".txt" required />
-    <button id="btn" type="submit">Analizar</button>
-  </form>
-  <p class="muted">El archivo debe seguir el formato del lenguaje del proyecto (TORNEO, EQUIPOS, ELIMINACION...)</p>
-</div>
+  <div class="card">
+    <h3>Descargas</h3>
+    <div class="row">
+      <a id="dlTokens"  class="btn hidden" download="tokens.html">Descargar tokens.html</a>
+      <a id="dlErrores" class="btn hidden" download="errores.html">Descargar errores.html</a>
+      <a id="dlResumen" class="btn hidden" download="resumen.html">Descargar resumen.html</a>
+      <a id="dlDot"     class="btn hidden" download="bracket.dot">Descargar bracket.dot</a>
+    </div>
+    <p class="muted">Para PNG local: dot -Tpng bracket.dot -o bracket.png</p>
+  </div>
 
-<div id="resultado" class="card" style="display:none">
-  <h2>Reportes</h2>
-  <div class="links" id="links"></div>
-</div>
+  <div class="card">
+    <h3>Vistas rapidas</h3>
+    <div id="preview">
+      <div>
+        <h4>Tokens</h4>
+        <iframe id="pvTokens"></iframe>
+      </div>
+      <div>
+        <h4>Errores</h4>
+        <iframe id="pvErrores"></iframe>
+      </div>
+      <div>
+        <h4>Resumen</h4>
+        <iframe id="pvResumen"></iframe>
+      </div>
+      <div>
+        <h4>Bracket (DOT)</h4>
+        <pre id="pvDot" class="mono" style="white-space:pre-wrap;max-height:320px;overflow:auto;border:1px solid #eee;border-radius:8px;padding:8px;"></pre>
+      </div>
+    </div>
+  </div>
 
-<script>
-  const form = document.getElementById('form');
-  const btn = document.getElementById('btn');
-  const box = document.getElementById('resultado');
-  const links = document.getElementById('links');
-
-  form.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    btn.disabled = true;
-    links.innerHTML = 'Procesando...';
-
-    const data = new FormData(form);
-    try {
-      const resp = await fetch('/analizar', { method:'POST', body:data });
-      if (!resp.ok) throw new Error('Error en el analisis');
-      const json = await resp.json();
-      links.innerHTML = '';
-      for (const [k, v] of Object.entries(json.files)) {
-        const a = document.createElement('a');
-        a.href = v; a.target = '_blank';
-        a.textContent = 'Abrir ' + k;
-        links.appendChild(a);
-      }
-      box.style.display = '';
-    } catch (err) {
-      links.textContent = 'Ocurrio un error: ' + err.message;
-      box.style.display = '';
-    } finally {
-      btn.disabled = false;
-    }
-  });
-</script>
+  <script type="module" src="./app.js"></script>
+</body>
+</html>

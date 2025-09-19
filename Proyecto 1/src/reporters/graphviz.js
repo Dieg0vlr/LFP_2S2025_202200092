@@ -1,14 +1,17 @@
 const fs = require('fs');
 const path = require('path');
+const { execFile } = require('child_process');
 
 function normalizaFase(f) {
   if (!f) return 'otros';
   const s = String(f).toLowerCase();
   if (s.includes('cuarto')) return 'cuartos';
   if (s.includes('semi')) return 'semifinal';
-  if (s.includes('final')) return s === 'final' ? 'final' : 'semifinal';
+  if (s === 'final') return 'final';
+  if (s.includes('final')) return 'semifinal';
   return s;
 }
+
 function faseOrden(f) {
   const f2 = normalizaFase(f);
   if (f2 === 'cuartos') return 1;
@@ -60,7 +63,7 @@ function guardar_bracket_dot(modelo, destinoDir) {
   fs.writeFileSync(path.join(destinoDir, 'bracket.dot'), L.join('\n'));
 }
 
-// llama a Graphviz: dot -Tpng bracket.dot -o bracket.png
+// dot -Tpng out/bracket.dot -o out/bracket.png
 function guardar_bracket_png(destinoDir, cb) {
   const dotPath = path.join(destinoDir, 'bracket.dot');
   const pngPath = path.join(destinoDir, 'bracket.png');
@@ -69,4 +72,4 @@ function guardar_bracket_png(destinoDir, cb) {
   });
 }
 
-module.exports = { guardar_bracket_dot };
+module.exports = { guardar_bracket_dot, guardar_bracket_png };

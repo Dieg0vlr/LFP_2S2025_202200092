@@ -34,7 +34,8 @@ class lexer {
     // validar aperturas sin cierre al final
     while (this.pila.length > 0) {
       const top = this.pila.pop();
-      this.errores.push(new error_lexico(top.simbolo, 'SIMBOLO_ESPERADO_FALTANTE', 'Símbolo de cierre faltante', top.linea, top.columna));
+      this.errores.push(new error_lexico(top.simbolo, 'SIMBOLO_ESPERADO_FALTANTE', 'Simbolo de cierre faltante', top.linea, top.columna));
+
     }
 
     return { tokens: this.tokens, errores: this.errores };
@@ -95,6 +96,7 @@ class lexer {
             if (!top || top.simbolo !== esperado) {
                 // cierre sin apertura
                 this.errores.push(new error_lexico(sym, 'SIMBOLO_ESPERADO_FALTANTE', `Se esperaba cierre para '${esperado}'`, linea, col));
+
             }
         }
             

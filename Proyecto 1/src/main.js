@@ -16,26 +16,26 @@ function leerArchivo(ruta) {
 
 function main() {
   //si no pasan path por CLI, usa samples/torneo1.txt
-  const rutaEntrada = process.argv[2] || path.resolve(process.cwd(), 'samples', 'torneo1.txt');
+  const rutaEntrada = process.argv[2] || path.resolve(process.cwd(), 'ejemplos', 'torneo1.txt');
   const input = leerArchivo(rutaEntrada);
 
-  // 1)Lexer
+  // Lexer
   const lx = new lexer(input);
   const { tokens, errores: erroresLex } = lx.analizar();
 
-  // 2)Parser -> modelo (stats, goleadores, partidos, info, errores semanticos)
+  // Parser -> modelo (stats, goleadores, partidos, info, errores semanticos)
   const modelo = parsear_modelo(tokens);
 
-  // 3)unir errores (lexicos + semanticos)
+  // unir errores (lexicos + semanticos)
   const errores = (modelo.errores_semanticos && modelo.errores_semanticos.length)
     ? erroresLex.concat(modelo.errores_semanticos)
     : erroresLex;
 
-  // 4)out/
+  // out/
   const outDir = path.resolve(process.cwd(), 'out');
   asegurarDir(outDir);
 
-  // 5)Reportes
+  // Reportes
   guardar_tokens_html(tokens, outDir);
   guardar_errores_html(errores, outDir);
   guardar_resumen_html(modelo, outDir);
