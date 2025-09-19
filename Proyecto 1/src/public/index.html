@@ -16,33 +16,26 @@
     .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
     #preview{display:grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap:12px}
     iframe{width:100%; height:320px; border:1px solid #eee; border-radius:8px}
-    .hidden{display:none}
   </style>
 </head>
 <body>
   <header>
     <h1>TourneyJS</h1>
-    <span class="muted">- analisis lexico y reportes (cliente puro, sin servidor)</span>
+    <span class="muted">- visor de reportes generados en out/</span>
   </header>
 
   <div class="card">
+    <p class="muted">
+      1) Corre primero: <code>node src/main.js ejemplos/torneo1.txt</code><br>
+      2) Luego haz clic en "Actualizar vistas"
+    </p>
     <div class="row">
-      <input type="file" id="fileInput" accept=".txt" />
-      <button id="analyzeBtn" class="btn primary">Analizar archivo</button>
-      <span id="status" class="muted"></span>
+      <button id="refreshBtn" class="btn primary">Actualizar vistas</button>
+      <a class="btn" href="./out/tokens.html" target="_blank">Abrir tokens.html</a>
+      <a class="btn" href="./out/errores.html" target="_blank">Abrir errores.html</a>
+      <a class="btn" href="./out/resumen.html" target="_blank">Abrir resumen.html</a>
+      <a class="btn" href="./out/bracket.dot" target="_blank">Abrir bracket.dot</a>
     </div>
-    <p class="muted">Sube un .txt con las secciones TORNEO, EQUIPOS y ELIMINACION.</p>
-  </div>
-
-  <div class="card">
-    <h3>Descargas</h3>
-    <div class="row">
-      <a id="dlTokens"  class="btn hidden" download="tokens.html">Descargar tokens.html</a>
-      <a id="dlErrores" class="btn hidden" download="errores.html">Descargar errores.html</a>
-      <a id="dlResumen" class="btn hidden" download="resumen.html">Descargar resumen.html</a>
-      <a id="dlDot"     class="btn hidden" download="bracket.dot">Descargar bracket.dot</a>
-    </div>
-    <p class="muted">Para PNG local: dot -Tpng bracket.dot -o bracket.png</p>
   </div>
 
   <div class="card">
@@ -67,6 +60,22 @@
     </div>
   </div>
 
-  <script type="module" src="./app.js"></script>
+  <script>
+    function loadAll(){
+      document.getElementById('pvTokens').src  = '../../out/tokens.html?'  + Date.now();
+      document.getElementById('pvErrores').src = '../../out/errores.html?' + Date.now();
+      document.getElementById('pvResumen').src = '../../out/resumen.html?' + Date.now();
+
+      fetch('../../out/bracket.dot')
+        .then(r => r.ok ? r.text() : Promise.reject())
+        .then(txt => { document.getElementById('pvDot').textContent = txt; })
+        .catch(() => { document.getElementById('pvDot').textContent = 'bracket.dot no encontrado. Corre el main primero.'; });
+
+    }
+
+    document.getElementById('refreshBtn').addEventListener('click', loadAll);
+    // cargar al abrir
+    loadAll();
+  </script>
 </body>
 </html>

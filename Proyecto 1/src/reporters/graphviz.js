@@ -54,7 +54,12 @@ function guardar_bracket_dot(modelo, destinoDir) {
       L.push(`    "${gid}" [label="${res}", shape=oval, fillcolor="#eef"];`);
       L.push(`    "${e1}" -> "${gid}";`);
       L.push(`    "${e2}" -> "${gid}";`);
-      if (p.ganador) L.push(`    "${gid}" -> "${p.ganador}" [color="#2a7"];`);
+      
+      if (p.ganador) {
+        // resaltar nodo del ganador con borde verde
+        L.push(`    "${p.ganador}" [color="#2a7", penwidth=2];`);
+}
+
     }
     L.push('  }');
   }
@@ -63,13 +68,5 @@ function guardar_bracket_dot(modelo, destinoDir) {
   fs.writeFileSync(path.join(destinoDir, 'bracket.dot'), L.join('\n'));
 }
 
-// dot -Tpng out/bracket.dot -o out/bracket.png
-function guardar_bracket_png(destinoDir, cb) {
-  const dotPath = path.join(destinoDir, 'bracket.dot');
-  const pngPath = path.join(destinoDir, 'bracket.png');
-  execFile('dot', ['-Tpng', dotPath, '-o', pngPath], (err) => {
-    if (cb) cb(err, pngPath);
-  });
-}
 
-module.exports = { guardar_bracket_dot, guardar_bracket_png };
+module.exports = { guardar_bracket_dot };
