@@ -77,7 +77,7 @@ function guardar_resumen_html(modelo, destinoDir) {
   const partidos = modelo.partidos || [];
   const errores_semanticos = modelo.errores_semanticos || [];
 
-  // Info general (pares clave/valor)
+  // Info general
   const infoRows = [];
   const keys = Object.keys(info);
   for (let i = 0; i < keys.length; i++) {
@@ -86,7 +86,7 @@ function guardar_resumen_html(modelo, destinoDir) {
   }
   const infoHtml = _table(['Estadistica', 'Valor'], infoRows);
 
-  // Tabla de posiciones (con puntos = 3 por victoria)
+  // Tabla de posiciones con puntos = 3 por victoria
   const eqRowsRaw = [];
   for (let i = 0; i < equiposStats.length; i++) {
     const e = equiposStats[i];
@@ -155,7 +155,7 @@ function guardar_resumen_html(modelo, destinoDir) {
   }
   const parHtml = _table(['Fase','Partido','Resultado','Ganador'], parRows);
 
-  // Seccion de bracket (.dot) si existe
+  // Seccion de bracket (.dot) 
   const dotPath = path.join(destinoDir, 'bracket.dot');
   const bracketSection = fs.existsSync(dotPath)
     ? `<h2>Bracket (.dot)</h2><p>Archivo generado: <code>out/bracket.dot</code></p>`

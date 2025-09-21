@@ -14,7 +14,7 @@ function parsear_modelo(tokens) {
         goleadoresMap: {}   //"Jugador1Equipo" -> { jugador, equipo, goles, minutos[] }
     };
 
-    // helpers del parser
+    // helpers
     function at() {
         return ctx.tks[ctx.i]; 
     }
@@ -131,7 +131,7 @@ function parsear_modelo(tokens) {
         }
 
         ctx.modelo.partidos.push({ fase, e1, e2, resultado: resStr, ganador });
-        // fase minima alcanzada ( sobreescribe con la ultima fase vista)
+        // fase minima alcanzada y sobreescribe con la ultima fase vista
         ctx.stats[e1].fase = fase;
         ctx.stats[e2].fase = fase;
     }
@@ -192,7 +192,6 @@ function parsear_modelo(tokens) {
                     if (isRes('jugador')) {
                         adv(); expectSym(':', 'jugador'); const cadNom = expectTipo('CADENA', 'nombre jugador');
                         const jugName = cadNom ? cadNom.lexema : '???';
-                        // detalles jugador:
                         expectSym('[', 'detalles jugador');
                         // leer pares atributo: valor, separandolos por coma
                         let pos = null, numero = null, edad = null;
@@ -314,9 +313,9 @@ function parsear_modelo(tokens) {
     }
 
 
-    // heurística simple: tratar de inferir equipo del goleador (si pertenece a e1 o e2)
+    // tratar de inferir equipo del goleador si pertenece a e1 o e2
     function inferEquipo(jugador, e1, e2) {
-        // Si tienes listado de jugadores por equipo, intenta buscarlo:
+        // Busca la lista de jugadores por equipo
         if (ctx.equipos[e1]) {
         for (let i = 0; i < ctx.equipos[e1].jugadores.length; i++) {
             if (ctx.equipos[e1].jugadores[i].nombre === jugador) return e1;
@@ -339,10 +338,10 @@ function parsear_modelo(tokens) {
         else { /* token suelto, consumir para evitar bucles */ adv(); }
     }
 
-    // Consolidar stats en arrays
+    // Stats en arreglos
     ctx.modelo.equiposStats = Object.values(ctx.stats);
 
-    // Consolidar goleadores
+    // Goleadores
     ctx.modelo.goleadores = Object.values(ctx.goleadoresMap);
 
     // Metricas generales
@@ -354,7 +353,7 @@ function parsear_modelo(tokens) {
     ctx.modelo.info['Partidos Completados'] = totalPartidos; // si tu lenguaje tuviera pendientes, aquí se ajusta
     ctx.modelo.info['Total de Goles'] = totalGoles;
     ctx.modelo.info['Promedio de Goles por Partido'] = totalPartidos > 0 ? (totalGoles / totalPartidos).toFixed(2) : '0.00';
-    // Fase “actual”: última fase vista en partidos
+    // Fase actual: ultima fase vista 
     if (ctx.modelo.partidos.length) ctx.modelo.info['Fase Actual'] = ctx.modelo.partidos[ctx.modelo.partidos.length - 1].fase;
 
     return ctx.modelo;

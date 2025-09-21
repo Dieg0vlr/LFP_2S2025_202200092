@@ -10,7 +10,6 @@ class lexer {
         this.columna = 1;
         this.tokens = [];
         this.errores = [];
-    // pila para validar balanceo de llaves/corchetes
         this.pila = [];
     }        
 
@@ -31,7 +30,7 @@ class lexer {
         this.errores.push(new error_lexico(bad, 'TOKEN_INVALIDO', 'Caracter no reconocido', this.linea, startCol));
     }
 
-    // validar aperturas sin cierre al final
+    // valida aperturas sin cierre al final
     while (this.pila.length > 0) {
       const top = this.pila.pop();
       this.errores.push(new error_lexico(top.simbolo, 'SIMBOLO_ESPERADO_FALTANTE', 'Simbolo de cierre faltante', top.linea, top.columna));
@@ -70,7 +69,7 @@ class lexer {
         if(ch === '"') { cerrado = true; break; }
 
         if (ch === '\\') {
-            // permitir escapes simples \" y \
+            // permitir \" y \
             if (!this._eof()) { lex += ch + this._next(); continue; }    
         }
 
@@ -126,8 +125,17 @@ class lexer {
         }
         return false;
         }
+        
     _isDigit(ch) { return ch >= '0' && ch <= '9'; }
-    _isSymbol(ch) { return '{}[]:,-'.includes(ch); }
+    _isSymbol(ch) {
+        switch (ch) {
+        case '{': case '}': case '[': case ']':
+        case ':': case ',': case '-':
+            return true;
+        default:
+            return false;
+    }
+  }
 
     _consumeWhitespace() {
         while (!this._eof() && this._isWhitespace(this._peek())) {
