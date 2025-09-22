@@ -4,7 +4,7 @@ const path = require('path');
 const { lexer } = require('./lexer');
 const { parsear_modelo } = require('./parser');
 const { guardar_tokens_html, guardar_errores_html, guardar_resumen_html } = require('./reporters/html_report');
-const { guardar_bracket_dot } = require('./reporters/graphviz'); // ← corregida la ruta
+const { guardar_bracket_dot } = require('./reporters/graphviz');
 
 function asegurarDir(dir) {
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
@@ -15,7 +15,7 @@ function leerArchivo(ruta) {
 }
 
 function main() {
-  //si no pasan path por CLI, usa samples/torneo1.txt
+  //si no pasan path usa ejemplos/torneo1.txt
   const rutaEntrada = process.argv[2] || path.resolve(process.cwd(), 'ejemplos', 'torneo1.txt');
   const input = leerArchivo(rutaEntrada);
 
@@ -23,10 +23,10 @@ function main() {
   const lx = new lexer(input);
   const { tokens, errores: erroresLex } = lx.analizar();
 
-  // Parser -> modelo (stats, goleadores, partidos, info, errores semanticos)
+  // Parser -> formato: stats, goleadores, partidos, info, errores semanticos
   const modelo = parsear_modelo(tokens);
 
-  // unir errores (lexicos + semanticos)
+  // unir errores lexicos + semanticos
   const errores = (modelo.errores_semanticos && modelo.errores_semanticos.length)
     ? erroresLex.concat(modelo.errores_semanticos)
     : erroresLex;

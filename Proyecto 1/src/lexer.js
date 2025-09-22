@@ -18,11 +18,11 @@ class lexer {
     while (!this._eof()) {
         const ch = this._peek();
 
-        if (this._isWhitespace(ch)) { this._consumeWhitespace(); continue; }
-        if (this._isLetter(ch)) { this._scanIdent(); continue; }
-        if (this._isDigit(ch))      { this._scanNumber();       continue; }
-        if(ch === '"') { this._scanString(); continue; }
-        if (this._isSymbol(ch)) { this._emitSymbol(this._next()); continue; }
+        if (this._isWhitespace(ch)) { this._consumeWhitespace(); continue; } // Clasifica espacio en blanco
+        if (this._isLetter(ch)) { this._scanIdent(); continue; } //Clasifica letra
+        if (this._isDigit(ch))      { this._scanNumber();       continue; } // Clasifica digito
+        if(ch === '"') { this._scanString(); continue; } // Clasifica comilla doble
+        if (this._isSymbol(ch)) { this._emitSymbol(this._next()); continue; } // Cualquier otro
 
         // error en caso de ser cualquier otro caracter
         const startCol = this.columna;
