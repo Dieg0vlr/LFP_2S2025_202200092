@@ -1,23 +1,74 @@
 TORNEO {
-  nombre: "Mundial",
-  equipos: 2,
-  sede: "Qatar"
+  nombre: "Mundial Universitario",
+  equipos: 8,
+  sede: "Guatemala"
 }
 
 EQUIPOS {
-  equipo: "A" [
-    jugador: "Juan" [posicion: "Delantero", numero: 9, edad: 25]
+  equipo: "Leones FC" [
+    jugador: "Carlos" [posicion: "Delantero", numero: 9, edad: 22],
+    jugador: "Mario" [posicion: "Portero", numero: 1, edad: 24]
   ],
-  equipo: "B" [
-    jugador: "Luis" [posicion: "Portero", numero: 1, edad: 28]
+  equipo: "Aguilas United" [
+    jugador: "Ana" [posicion: "Defensa", numero: 4, edad: 21],
+    jugador: "Roberto" [posicion: "Delantero", numero: 10, edad: 23]
+  ],
+  equipo: "Tigres Academy" [
+    jugador: "Javier" [posicion: "MedioCampo", numero: 7, edad: 20]
+  ],
+  equipo: "Pumas City" [
+    jugador: "Carmen" [posicion: "Delantero", numero: 11, edad: 22]
+  ],
+  equipo: "Condores FC" [
+    jugador: "Luis" [posicion: "Portero", numero: 1, edad: 25]
+  ],
+  equipo: "Halcones" [
+    jugador: "Diego" [posicion: "Defensa", numero: 3, edad: 24]
+  ],
+  equipo: "Toros FC" [
+    jugador: "Pedro" [posicion: "Delantero", numero: 9, edad: 26]
+  ],
+  equipo: "Lobos" [
+    jugador: "Sofia" [posicion: "Defensa", numero: 2, edad: 20]
   ]
 }
 
 ELIMINACION {
+  cuartos: [
+    partido: "Leones FC" vs "Condores FC" [resultado: "3-1", goleadores: [
+      "Carlos" [minuto: 15],
+      "Carlos" [minuto: 45],
+      "Luis" [minuto: 67],
+      "Carlos" [minuto: 80]
+    ]],
+    partido: "Aguilas United" vs "Tigres Academy" [resultado: "2-0", goleadores: [
+      "Roberto" [minuto: 22],
+      "Ana" [minuto: 75]
+    ]],
+    partido: "Pumas City" vs "Halcones" [resultado: "1-0", goleadores: [
+      "Carmen" [minuto: 50]
+    ]],
+    partido: "Toros FC" vs "Lobos" [resultado: "2-1", goleadores: [
+      "Pedro" [minuto: 30],
+      "Pedro" [minuto: 60],
+      "Sofia" [minuto: 70]
+    ]]
+  ],
+  semifinal: [
+    partido: "Leones FC" vs "Aguilas United" [resultado: "1-0", goleadores: [
+      "Carlos" [minuto: 40]
+    ]],
+    partido: "Pumas City" vs "Toros FC" [resultado: "2-1", goleadores: [
+      "Carmen" [minuto: 15],
+      "Pedro" [minuto: 55],
+      "Carmen" [minuto: 85]
+    ]]
+  ],
   final: [
-    partido: "A" vs "B" [resultado: "2-1", goleadores: [
-      "Juan" [minuto: 10],
-      "Luis" [minuto: 50]
+    partido: "Leones FC" vs "Pumas City" [resultado: "2-1", goleadores: [
+      "Carlos" [minuto: 20],
+      "Carmen" [minuto: 45],
+      "Carlos" [minuto: 70]
     ]]
   ]
 }
