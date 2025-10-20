@@ -1,0 +1,7 @@
+{
+    "type": "module",
+    "scripts": {
+        "test1": "node ./src/Test/ScannerTest.js",
+        "test2": "node ./src/Test/ParserTest.js"
+    }
+}

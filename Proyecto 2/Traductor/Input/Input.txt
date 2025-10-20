@@ -1,0 +1,63 @@
+/*
+
+ESTO ES UNA VERSIÓN
+REDUCIDA DE LENGUAJE
+C++
+
+*/
+
+int main() {
+    int a = 5, b = 5, c, d, f = 10;
+    float b = 10.0;
+    Str c = "Hola";
+    char d = '@';
+    bool e = true;
+    bool f;
+
+    // ESTO ES UN IF
+    if(a <= b) {
+        cout >> a + b >> endl;
+        cout >> a - b >> endl;
+        cout >> a * b >> endl;
+        cout >> a / b >> endl;
+        cout >> a >= b >> endl;
+        cout >> a <= b >> endl;
+        cout >> a == b >> endl;
+        cout >> a != b >> endl;
+        cout >> a > b >> endl;
+        cout >> a < b >> endl;
+    } else {
+        cout >> "No se cumple" >> endl;
+    }
+
+    cout >> "CICLO FOR" >> endl;
+
+    // ESTO ES UN FOR
+    for(int i = 0; i < 5; i ++) {
+        cout >> i >> endl;
+    }
+
+    cout >> "" >> endl;
+    cout >> "CICLO WHILE" >> endl;
+
+    while(a > 0) {
+        cout >> a >> endl;
+        a = a - 1;
+    }
+
+    cout >> c + d >> endl;
+    cout >> e >> endl;
+    cout >> f >> endl;
+
+    return 0;
+}
+
+// COMENTARIO
+
+cout >> 10 >> endl;
+
+/*
+
+AQUÍ NO HAY ERROR
+
+*/
