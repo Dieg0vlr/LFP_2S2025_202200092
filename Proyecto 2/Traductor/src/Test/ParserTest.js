@@ -5,7 +5,7 @@ import { errors } from "../Utils/Errors.js";
 
 const io = new IO();
 
-const [input, error] = io.readFile('./Input/Input.txt');
+const [input, error] = io.readFile('../../Input/Input.txt');
 
 if (error) {
     console.error(`Error al leer el archivo: ${error.message}`);
@@ -25,9 +25,16 @@ console.log("===============");
 const scanner = new Scanner(input);
 const parser = new Parser(scanner);
 
+// Ejecuta parser
 parser.parse();
 
+// mostrar codigo Python generado
+const py = parser.getPythonCode();
+console.log("\n=== PYTHON TRADUCIDO ===");
+console.log(py);
+
+// Mostrar errores
 console.log("\n\x1b[31mERRORS\x1b[0m");
-console.table(errors)
+console.table(errors);
 
 io.close();
