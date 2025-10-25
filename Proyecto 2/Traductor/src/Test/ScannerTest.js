@@ -1,10 +1,16 @@
 import IO from "../Utils/IO/IO.js";
 import Scanner from "../Language/Scanner.js";
 import { errors } from "../Utils/Errors.js";
+import path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+const ROOT = path.resolve(__dirname, "../../"); // sube dos niveles a Traductor
 
 const io = new IO();
 
-const [input, error] = io.readFile('./Input/Input.txt');
+const [input, error] = io.readFile(path.join(ROOT, "Input", "Input.txt"));
 
 if (error) {
     console.error(`Error al leer el archivo: ${error.message}`);

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>JavaBridge — Traductor Java a Python</title>
+  <link rel="icon" href="data:,">
+  <style>
+    body {
+      margin: 0;
+      background: #0f172a;
+      color: #e2e8f0;
+      font-family: Segoe UI, Arial, sans-serif;
+    }
+    header {
+      background: #1e293b;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 2px 4px #00000033;
+    }
+    header h1 { font-size: 18px; margin: 0; }
+    nav button {
+      margin-right: 10px;
+      background: #334155;
+      border: none;
+      color: #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    nav button:hover { background: #475569; }
+    main {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      height: calc(100vh - 260px);
+    }
+    textarea {
+      width: 100%;
+      height: 100%;
+      background: #111827;
+      color: #e2e8f0;
+      border: none;
+      resize: none;
+      padding: 10px;
+      font-size: 14px;
+      font-family: Consolas, monospace;
+      box-sizing: border-box;
+    }
+    #salida {
+      border-left: 1px solid #334155;
+      background: #0b1220;
+    }
+    #consola {
+      background: #111827;
+      color: #d1d5db;
+      font-family: Consolas, monospace;
+      padding: 10px;
+      border-top: 1px solid #334155;
+      height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>JavaBridge — Traductor de Java a Python</h1>
+    <nav>
+      <button id="btnNuevo">Nuevo</button>
+      <button id="btnAbrir">Abrir</button>
+      <button id="btnGuardar">Guardar</button>
+      <button id="btnTraducir">Traducir</button>
+      <button id="btnVerTokens">Ver Tokens</button>
+      <button id="btnVerErrores">Ver Errores</button>
+      <button id="btnSimular">Simular Ejecución</button>
+      <button id="btnAyuda">Acerca de</button>
+    </nav>
+  </header>
+
+  <main>
+    <textarea id="entrada" placeholder="Escribe o carga código Java aquí..."></textarea>
+    <textarea id="salida" readonly placeholder="Código Python traducido..."></textarea>
+  </main>
+
+  <div id="consola"></div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>
